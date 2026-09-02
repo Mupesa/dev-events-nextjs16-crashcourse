@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" width="100%" height="100%" style="background:#090d12; font-family:'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;">
+  <defs>
+    <linearGradient id="bgGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1118"/>
+      <stop offset="100%" stop-color="#05080c"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5dfeca"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+    <filter id="shadow4" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+    <marker id="arrCyan4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 Z" fill="#5dfeca"/>
+    </marker>
+    <marker id="arrYellow4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 Z" fill="#fcd34d"/>
+    </marker>
+    <marker id="arrRed4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 Z" fill="#fb7185"/>
+    </marker>
+    <marker id="arrGreen4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <rect width="1400" height="900" fill="url(#bgGrad4)" rx="16"/>
+
+  <!-- Title Header -->
+  <g transform="translate(60, 45)">
+    <rect x="0" y="0" width="8" height="42" rx="4" fill="url(#cyanGrad4)"/>
+    <text x="24" y="28" fill="#ffffff" font-size="26" font-weight="700">Database Engine: Connection Caching &amp; Schema Pipeline</text>
+    <text x="24" y="48" fill="#94a3b8" font-size="14">Lifecycle of lib/mongodb.ts Singleton &amp; database/*.model.ts Pre-Hooks / Indexes</text>
+  </g>
+
+  <!-- ==================== TOP: CONNECTION CACHE ==================== -->
+  <g transform="translate(60, 120)">
+    <rect width="1280" height="340" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" filter="url(#shadow4)"/>
+    
+    <!-- Header -->
+    <rect x="0" y="0" width="1280" height="40" rx="14" fill="#1e293b" fill-opacity="0.8"/>
+    <circle cx="25" cy="20" r="6" fill="#fcd34d"/>
+    <text x="45" y="25" fill="#fcd34d" font-size="15" font-weight="700">Part 1: lib/mongodb.ts — Global Connection &amp; Promise Caching Engine</text>
+
+    <!-- Node 1: Request arrives -->
+    <g transform="translate(30, 70)">
+      <rect width="210" height="80" rx="8" fill="#16222f" stroke="#224249" stroke-width="1.2"/>
+      <text x="15" y="30" fill="#5dfeca" font-size="14" font-weight="700">connectToDatabase()</text>
+      <text x="15" y="52" fill="#94a3b8" font-size="11">Invoked by RSC or API</text>
+    </g>
+
+    <!-- Arrow 1 to 2 -->
+    <line x1="240" y1="110" x2="310" y2="110" stroke="#5dfeca" stroke-width="2" marker-end="url(#arrCyan4)"/>
+
+    <!-- Node 2: Cache Check -->
+    <g transform="translate(310, 60)">
+      <polygon points="100,0 200,50 100,100 0,50" fill="#1c2438" stroke="#38bdf8" stroke-width="1.2"/>
+      <text x="100" y="46" fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle">cache.connection</text>
+      <text x="100" y="62" fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle">exists?</text>
+    </g>
+
+    <!-- Branch YES: Return immediately -->
+    <g transform="translate(560, 65)">
+      <rect width="230" height="70" rx="8" fill="#14261c" stroke="#34d399" stroke-width="1.2"/>
+      <text x="15" y="28" fill="#34d399" font-size="13" font-weight="700">✓ Return Cache</text>
+      <text x="15" y="50" fill="#94a3b8" font-size="11">Zero latency • Existing connection</text>
+    </g>
+    <line x1="510" y1="110" x2="560" y2="110" stroke="#34d399" stroke-width="2" marker-end="url(#arrGreen4)"/>
+    <text x="530" y="100" fill="#34d399" font-size="11" font-weight="700">YES</text>
+
+    <!-- Branch NO: Promise Check -->
+    <line x1="410" y1="160" x2="410" y2="210" stroke="#fcd34d" stroke-width="2" marker-end="url(#arrYellow4)"/>
+    <text x="420" y="190" fill="#fcd34d" font-size="11" font-weight="700">NO</text>
+
+    <!-- Node 3: Promise Deduplication -->
+    <g transform="translate(290, 210)">
+      <rect width="240" height="90" rx="8" fill="#241e17" stroke="#d97706" stroke-width="1.2"/>
+      <text x="15" y="26" fill="#fcd34d" font-size="13" font-weight="700">Promise Deduplication</text>
+      <text x="15" y="48" fill="#e2e8f0" font-size="11">cache.promise ??=</text>
+      <text x="15" y="66" fill="#94a3b8" font-size="11">mongoose.connect(URI, opts)</text>
+    </g>
+
+    <!-- Arrow 3 to 4 -->
+    <line x1="530" y1="255" x2="600" y2="255" stroke="#fcd34d" stroke-width="2" marker-end="url(#arrYellow4)"/>
+
+    <!-- Node 4: Await & Store -->
+    <g transform="translate(600, 210)">
+      <rect width="260" height="90" rx="8" fill="#171e2c" stroke="#3b82f6" stroke-width="1.2"/>
+      <text x="15" y="26" fill="#38bdf8" font-size="13" font-weight="700">await cache.promise</text>
+      <text x="15" y="48" fill="#e2e8f0" font-size="11">cache.connection = conn</text>
+      <text x="15" y="68" fill="#34d399" font-size="11">Returns active Mongoose client</text>
+    </g>
+
+    <!-- Node 5: Error handling callout -->
+    <g transform="translate(900, 110)">
+      <rect width="340" height="190" rx="8" fill="#1c1318" stroke="#e11d48" stroke-width="1"/>
+      <text x="15" y="28" fill="#fb7185" font-size="13" font-weight="700">Transient Failure Safety Catch:</text>
+      <text x="15" y="52" fill="#fca5a5" font-size="11">catch (error) {</text>
+      <text x="30" y="72" fill="#ffffff" font-size="11">cache.promise = null;</text>
+      <text x="30" y="92" fill="#fca5a5" font-size="11">throw error;</text>
+      <text x="15" y="112" fill="#fca5a5" font-size="11">}</text>
+      <text x="15" y="140" fill="#94a3b8" font-size="11">• If connection fails temporarily, cache.promise</text>
+      <text x="15" y="158" fill="#94a3b8" font-size="11">is cleared so subsequent requests can retry.</text>
+    </g>
+  </g>
+
+  <!-- ==================== BOTTOM: SCHEMA PIPELINE ==================== -->
+  <g transform="translate(60, 490)">
+    <rect width="1280" height="370" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" filter="url(#shadow4)"/>
+    
+    <!-- Header -->
+    <rect x="0" y="0" width="1280" height="40" rx="14" fill="#1e293b" fill-opacity="0.8"/>
+    <circle cx="25" cy="20" r="6" fill="#34d399"/>
+    <text x="45" y="25" fill="#34d399" font-size="15" font-weight="700">Part 2: Mongoose Schemas, Pre-Hooks &amp; Index Enforcement</text>
+
+    <!-- Box 1: Event Model Pipeline -->
+    <g transform="translate(30, 60)">
+      <rect width="590" height="280" rx="10" fill="#131e24" stroke="#224249" stroke-width="1.2"/>
+      <text x="20" y="30" fill="#5dfeca" font-size="15" font-weight="700">database/event.model.ts — Validation Pipeline</text>
+      
+      <!-- Substep 1 -->
+      <g transform="translate(20, 50)">
+        <rect width="550" height="55" rx="6" fill="#182a32"/>
+        <text x="15" y="22" fill="#38bdf8" font-size="12" font-weight="700">1. Guard against whitespace-only fields:</text>
+        <text x="15" y="40" fill="#94a3b8" font-size="11">Ensures title, description, overview, venue, etc. have non-empty content.</text>
+      </g>
+      
+      <!-- Substep 2 -->
+      <g transform="translate(20, 115)">
+        <rect width="550" height="55" rx="6" fill="#182a32"/>
+        <text x="15" y="22" fill="#5dfeca" font-size="12" font-weight="700">2. Auto-Slug Generation (createSlug):</text>
+        <text x="15" y="40" fill="#94a3b8" font-size="11">Normalizes diacritics NFKD → lowercases → replaces non-alphanumeric with hyphens.</text>
+      </g>
+
+      <!-- Substep 3 -->
+      <g transform="translate(20, 180)">
+        <rect width="550" height="75" rx="6" fill="#182a32"/>
+        <text x="15" y="22" fill="#fcd34d" font-size="12" font-weight="700">3. Time &amp; Date Normalization (normalizeTime &amp; toISOString):</text>
+        <text x="15" y="40" fill="#94a3b8" font-size="11">• Converts "3:00 pm" or "15:00" → strict 24-hr "15:00".</text>
+        <text x="15" y="58" fill="#94a3b8" font-size="11">• Validates new Date(this.date) and formats to unambiguous ISO-8601 string.</text>
+      </g>
+    </g>
+
+    <!-- Box 2: Booking Model Pipeline -->
+    <g transform="translate(660, 60)">
+      <rect width="590" height="280" rx="10" fill="#1f1828" stroke="#3b2b48" stroke-width="1.2"/>
+      <text x="20" y="30" fill="#c084fc" font-size="15" font-weight="700">database/booking.model.ts — Integrity &amp; Uniqueness</text>
+
+      <!-- Substep 1 -->
+      <g transform="translate(20, 50)">
+        <rect width="550" height="55" rx="6" fill="#291f36"/>
+        <text x="15" y="22" fill="#f472b6" font-size="12" font-weight="700">1. Pre-Save Existence Assertion (bookingSchema.pre('save')):</text>
+        <text x="15" y="40" fill="#94a3b8" font-size="11">const exists = await Event.exists({ _id: this.eventId }); // Prevents orphaned bookings</text>
+      </g>
+
+      <!-- Substep 2 -->
+      <g transform="translate(20, 115)">
+        <rect width="550" height="65" rx="6" fill="#291f36"/>
+        <text x="15" y="22" fill="#c084fc" font-size="12" font-weight="700">2. Compound Unique Index:</text>
+        <text x="15" y="40" fill="#e2e8f0" font-size="11" font-family="monospace">bookingSchema.index({ eventId: 1, email: 1 }, { unique: true });</text>
+        <text x="15" y="56" fill="#94a3b8" font-size="11">Guarantees an email can reserve at most ONE spot per event in MongoDB.</text>
+      </g>
+
+      <!-- Substep 3 -->
+      <g transform="translate(20, 190)">
+        <rect width="550" height="65" rx="6" fill="#291f36"/>
+        <text x="15" y="22" fill="#34d399" font-size="12" font-weight="700">3. Email Regex &amp; Normalization:</text>
+        <text x="15" y="40" fill="#94a3b8" font-size="11">Trims, forces lowercase, and regex matches /^[^\s@]+@[^\s@]+\.[^\s@]+$/.</text>
+      </g>
+    </g>
+  </g>
+</svg>

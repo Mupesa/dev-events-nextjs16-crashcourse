@@ -38,7 +38,8 @@ bookingSchema.pre("save", async function () {
   }
 });
 
-bookingSchema.index({ eventId: 1 });
+// One email address can reserve only one spot per event.
+bookingSchema.index({ eventId: 1, email: 1 }, { unique: true });
 
 export const Booking =
   (models.Booking as Model<BookingDocument> | undefined) ??
