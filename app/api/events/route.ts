@@ -7,6 +7,13 @@ type EventInput = Omit<IEvent, "slug" | "image" | "createdAt" | "updatedAt">;
 
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
 
+function missingConfiguration(): string[] {
+    return [
+        !process.env.MONGODB_URI?.trim() ? "MONGODB_URI" : null,
+        !process.env.CLOUDINARY_URL?.trim() ? "CLOUDINARY_URL" : null,
+    ].filter((key): key is string => key !== null);
+}
+
 function parseStringArray(value: FormDataEntryValue | null): string[] | null {
     if (typeof value !== "string") return null;
 
@@ -50,6 +57,14 @@ function uploadImage(buffer: Buffer): Promise<UploadApiResponse> {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
+    const missing = missingConfiguration();
+    if (missing.length > 0) {
+        return NextResponse.json(
+            { message: `Server configuration is incomplete: ${missing.join(", ")}.` },
+            { status: 503 },
+        );
+    }
+
     let formData: FormData;
 
     try {
@@ -155,6 +170,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function GET(): Promise<NextResponse> {
+    const missing = missingConfiguration();
+    if (missing.includes("MONGODB_URI")) {
+        return NextResponse.json(
+            { message: "Server configuration is incomplete: MONGODB_URI." },
+            { status: 503 },
+        );
+    }
+
     try {
         await connectDB();
         const events = await Event.find().sort({ createdAt: -1 }).lean().exec();
