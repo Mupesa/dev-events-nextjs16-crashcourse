@@ -168,10 +168,14 @@
   }
 
   .events {
-    @apply grid md:grid-cols-3 gap-10 sm:grid-cols-2 grid-cols-1;
+    @apply grid list-none md:grid-cols-3 gap-10 sm:grid-cols-2 grid-cols-1;
+
+    li {
+      @apply list-none;
+    }
   }
 
-  #event-card {
+  .event-card {
     @apply flex flex-col gap-3;
 
     .poster {
@@ -214,8 +218,10 @@
           @apply flex flex-col gap-2;
 
           ul {
+            @apply list-none list-inside;
+
             li {
-              @apply text-light-100 text-lg max-sm:text-sm;
+              @apply list-none text-light-100 text-lg max-sm:text-sm;
             }
           }
         }

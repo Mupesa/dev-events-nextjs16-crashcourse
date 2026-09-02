@@ -1,0 +1,298 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 960" width="100%" height="100%" style="background:#090d12; font-family:'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1118"/>
+      <stop offset="100%" stop-color="#05080c"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5dfeca"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="amberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fcd34d"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+
+    <!-- Filters & Shadows -->
+    <filter id="cardShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+    <filter id="glowCyan" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <!-- Markers -->
+    <marker id="arrowCyan" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 Z" fill="#5dfeca"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrowPurple" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 Z" fill="#c084fc"/>
+    </marker>
+    <marker id="arrowAmber" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 Z" fill="#fcd34d"/>
+    </marker>
+  </defs>
+
+  <rect width="1400" height="960" fill="url(#bgGrad)" rx="16"/>
+
+  <!-- Title Header -->
+  <g transform="translate(60, 45)">
+    <rect x="0" y="0" width="8" height="42" rx="4" fill="url(#cyanGrad)"/>
+    <text x="24" y="28" fill="#ffffff" font-size="26" font-weight="700" letter-spacing="0.5">DevEvent - Full System Architecture &amp; File Dependency Map</text>
+    <text x="24" y="48" fill="#94a3b8" font-size="14">Next.js 16.3 (App Router) • React 19 • Mongoose 9 • Tailwind CSS v4 • PostHog • Cloudinary</text>
+  </g>
+
+  <!-- ==================== 1. CLIENT LAYER ==================== -->
+  <g transform="translate(60, 120)">
+    <rect width="380" height="440" rx="14" fill="#0f172a" fill-opacity="0.8" stroke="#1e293b" stroke-width="1.5" filter="url(#cardShadow)"/>
+    <rect x="0" y="0" width="380" height="40" rx="14" fill="#1e293b" fill-opacity="0.6"/>
+    <circle cx="24" cy="20" r="6" fill="#38bdf8"/>
+    <text x="40" y="25" fill="#38bdf8" font-size="15" font-weight="700">Client / Browser Layer ('use client')</text>
+
+    <!-- Card 1: instrumentation-client.ts -->
+    <g transform="translate(20, 55)">
+      <rect width="340" height="60" rx="8" fill="#131e30" stroke="#1e3a5f" stroke-width="1"/>
+      <text x="14" y="26" fill="#e2e8f0" font-size="14" font-weight="600">instrumentation-client.ts</text>
+      <text x="14" y="46" fill="#94a3b8" font-size="12">PostHog client init • Ingest rewrites proxy</text>
+      <rect x="250" y="10" width="76" height="20" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+      <text x="258" y="24" fill="#38bdf8" font-size="10" font-weight="600">Analytics</text>
+    </g>
+
+    <!-- Card 2: LightRays.tsx -->
+    <g transform="translate(20, 125)">
+      <rect width="340" height="60" rx="8" fill="#131e30" stroke="#1e3a5f" stroke-width="1"/>
+      <text x="14" y="26" fill="#e2e8f0" font-size="14" font-weight="600">components/LightRays.tsx</text>
+      <text x="14" y="46" fill="#94a3b8" font-size="12">OGL WebGL animated light rays shader</text>
+      <rect x="265" y="10" width="60" height="20" rx="4" fill="#059669" fill-opacity="0.2"/>
+      <text x="273" y="24" fill="#34d399" font-size="10" font-weight="600">WebGL</text>
+    </g>
+
+    <!-- Card 3: ExploreBtn.tsx -->
+    <g transform="translate(20, 195)">
+      <rect width="340" height="60" rx="8" fill="#131e30" stroke="#1e3a5f" stroke-width="1"/>
+      <text x="14" y="26" fill="#e2e8f0" font-size="14" font-weight="600">components/ExploreBtn.tsx</text>
+      <text x="14" y="46" fill="#94a3b8" font-size="12">Smooth scroll anchor + explore_events_clicked</text>
+    </g>
+
+    <!-- Card 4: EventCard.tsx -->
+    <g transform="translate(20, 265)">
+      <rect width="340" height="60" rx="8" fill="#131e30" stroke="#1e3a5f" stroke-width="1"/>
+      <text x="14" y="26" fill="#e2e8f0" font-size="14" font-weight="600">components/EventCard.tsx</text>
+      <text x="14" y="46" fill="#94a3b8" font-size="12">Poster, title, date, time + event_card_clicked</text>
+    </g>
+
+    <!-- Card 5: BookEvent.tsx -->
+    <g transform="translate(20, 335)">
+      <rect width="340" height="75" rx="8" fill="#131e30" stroke="#38bdf8" stroke-width="1.2"/>
+      <text x="14" y="24" fill="#5dfeca" font-size="14" font-weight="700">components/BookEvent.tsx</text>
+      <text x="14" y="44" fill="#94a3b8" font-size="12">Booking form • calls createBooking Server Action</text>
+      <text x="14" y="62" fill="#38bdf8" font-size="11">router.refresh() on success • posthog tracking</text>
+    </g>
+  </g>
+
+  <!-- ==================== 2. RSC APP ROUTER LAYER ==================== -->
+  <g transform="translate(510, 120)">
+    <rect width="380" height="440" rx="14" fill="#0f172a" fill-opacity="0.8" stroke="#1e293b" stroke-width="1.5" filter="url(#cardShadow)"/>
+    <rect x="0" y="0" width="380" height="40" rx="14" fill="#1e293b" fill-opacity="0.6"/>
+    <circle cx="24" cy="20" r="6" fill="#5dfeca"/>
+    <text x="40" y="25" fill="#5dfeca" font-size="15" font-weight="700">Server Pages &amp; Layouts (RSC)</text>
+
+    <!-- Card 1: app/layout.tsx -->
+    <g transform="translate(20, 55)">
+      <rect width="340" height="70" rx="8" fill="#16222f" stroke="#224249" stroke-width="1"/>
+      <text x="14" y="24" fill="#e2e8f0" font-size="14" font-weight="600">app/layout.tsx &amp; NavBar.tsx</text>
+      <text x="14" y="44" fill="#94a3b8" font-size="12">Root Shell • Google Fonts • Glass Navbar</text>
+      <text x="14" y="60" fill="#5dfeca" font-size="11">Mounts &lt;LightRays /&gt; background canvas</text>
+    </g>
+
+    <!-- Card 2: app/page.tsx -->
+    <g transform="translate(20, 140)">
+      <rect width="340" height="90" rx="8" fill="#16222f" stroke="#224249" stroke-width="1"/>
+      <text x="14" y="24" fill="#e2e8f0" font-size="14" font-weight="600">app/page.tsx (Home View)</text>
+      <text x="14" y="44" fill="#94a3b8" font-size="12">Server Component (RSC)</text>
+      <text x="14" y="62" fill="#38bdf8" font-size="11">→ fetch(`${BASE_URL}/api/events`)</text>
+      <text x="14" y="78" fill="#94a3b8" font-size="11">Renders Featured Events grid via &lt;EventCard /&gt;</text>
+    </g>
+
+    <!-- Card 3: app/event/[slug]/page.tsx -->
+    <g transform="translate(20, 245)">
+      <rect width="340" height="165" rx="8" fill="#16222f" stroke="#5dfeca" stroke-width="1.2"/>
+      <text x="14" y="24" fill="#5dfeca" font-size="14" font-weight="700">app/event/[slug]/page.tsx</text>
+      <text x="14" y="44" fill="#94a3b8" font-size="12">Dynamic Route (Next.js 16 awaits params)</text>
+      <text x="14" y="64" fill="#38bdf8" font-size="11">1. fetch('/api/events/[slug]', { revalidate: 60 })</text>
+      <text x="14" y="82" fill="#c084fc" font-size="11">2. Promise.all([</text>
+      <text x="30" y="98" fill="#c084fc" font-size="11">getBookingCount(event._id),</text>
+      <text x="30" y="114" fill="#c084fc" font-size="11">getSimilarEventsBySlug(slug)</text>
+      <text x="14" y="130" fill="#c084fc" font-size="11">])</text>
+      <text x="14" y="150" fill="#94a3b8" font-size="11">Embeds &lt;BookEvent eventId={id} slug={slug} /&gt;</text>
+    </g>
+  </g>
+
+  <!-- ==================== 3. API & ACTIONS LAYER ==================== -->
+  <g transform="translate(960, 120)">
+    <rect width="380" height="440" rx="14" fill="#0f172a" fill-opacity="0.8" stroke="#1e293b" stroke-width="1.5" filter="url(#cardShadow)"/>
+    <rect x="0" y="0" width="380" height="40" rx="14" fill="#1e293b" fill-opacity="0.6"/>
+    <circle cx="24" cy="20" r="6" fill="#c084fc"/>
+    <text x="40" y="25" fill="#c084fc" font-size="15" font-weight="700">API Routes &amp; Server Actions</text>
+
+    <!-- Card 1: app/api/events/route.ts -->
+    <g transform="translate(20, 55)">
+      <rect width="340" height="90" rx="8" fill="#1f1830" stroke="#3b2d5a" stroke-width="1"/>
+      <text x="14" y="24" fill="#e2e8f0" font-size="14" font-weight="600">app/api/events/route.ts</text>
+      <text x="14" y="44" fill="#34d399" font-size="12">GET: Returns all events sorted by createdAt</text>
+      <text x="14" y="62" fill="#fb7185" font-size="12">POST: Multipart form-data • Cloudinary Upload</text>
+      <text x="14" y="78" fill="#94a3b8" font-size="11">Rolls back Cloudinary upload if Mongo save fails</text>
+    </g>
+
+    <!-- Card 2: app/api/events/[slug]/route.ts -->
+    <g transform="translate(20, 155)">
+      <rect width="340" height="70" rx="8" fill="#1f1830" stroke="#3b2d5a" stroke-width="1"/>
+      <text x="14" y="24" fill="#e2e8f0" font-size="14" font-weight="600">app/api/events/[slug]/route.ts</text>
+      <text x="14" y="44" fill="#94a3b8" font-size="12">GET single event • Regex slug validation</text>
+      <text x="14" y="60" fill="#38bdf8" font-size="11">Event.findOne({ slug }).lean()</text>
+    </g>
+
+    <!-- Card 3: lib/actions/booking.action.ts -->
+    <g transform="translate(20, 235)">
+      <rect width="340" height="95" rx="8" fill="#1f1830" stroke="#c084fc" stroke-width="1.2"/>
+      <text x="14" y="24" fill="#c084fc" font-size="14" font-weight="700">lib/actions/booking.action.ts</text>
+      <text x="14" y="44" fill="#e2e8f0" font-size="12">'use server' RPC mutation</text>
+      <text x="14" y="62" fill="#94a3b8" font-size="11">• createBooking({ eventId, email }) [Code 11000 check]</text>
+      <text x="14" y="80" fill="#94a3b8" font-size="11">• getBookingCount(eventId)</text>
+    </g>
+
+    <!-- Card 4: lib/actions/event.actions.ts -->
+    <g transform="translate(20, 340)">
+      <rect width="340" height="70" rx="8" fill="#1f1830" stroke="#3b2d5a" stroke-width="1"/>
+      <text x="14" y="24" fill="#e2e8f0" font-size="14" font-weight="600">lib/actions/event.actions.ts</text>
+      <text x="14" y="44" fill="#94a3b8" font-size="12">getSimilarEventsBySlug(slug)</text>
+      <text x="14" y="60" fill="#38bdf8" font-size="11">Queries matching tags ($in), limit 4</text>
+    </g>
+  </g>
+
+  <!-- ==================== 4. DATA & INFRASTRUCTURE LAYER ==================== -->
+  <g transform="translate(60, 600)">
+    <rect width="600" height="310" rx="14" fill="#0f172a" fill-opacity="0.8" stroke="#1e293b" stroke-width="1.5" filter="url(#cardShadow)"/>
+    <rect x="0" y="0" width="600" height="40" rx="14" fill="#1e293b" fill-opacity="0.6"/>
+    <circle cx="24" cy="20" r="6" fill="#fcd34d"/>
+    <text x="40" y="25" fill="#fcd34d" font-size="15" font-weight="700">Database Models &amp; Connection (database/ &amp; lib/)</text>
+
+    <!-- Card 1: lib/mongodb.ts -->
+    <g transform="translate(20, 55)">
+      <rect width="265" height="110" rx="8" fill="#1a1d20" stroke="#3a3e42" stroke-width="1"/>
+      <text x="14" y="24" fill="#fcd34d" font-size="14" font-weight="600">lib/mongodb.ts</text>
+      <text x="14" y="44" fill="#94a3b8" font-size="12">Mongoose Singleton Cache</text>
+      <text x="14" y="64" fill="#e2e8f0" font-size="11">globalThis.mongooseCache</text>
+      <text x="14" y="80" fill="#94a3b8" font-size="11">Prevents connection leaks</text>
+      <text x="14" y="96" fill="#34d399" font-size="11">Re-uses active promise</text>
+    </g>
+
+    <!-- Card 2: database/event.model.ts -->
+    <g transform="translate(305, 55)">
+      <rect width="275" height="110" rx="8" fill="#1a1d20" stroke="#3a3e42" stroke-width="1"/>
+      <text x="14" y="24" fill="#e2e8f0" font-size="14" font-weight="600">database/event.model.ts</text>
+      <text x="14" y="44" fill="#94a3b8" font-size="12">Event Schema &amp; Pre-hooks</text>
+      <text x="14" y="64" fill="#38bdf8" font-size="11">• Auto-slug generation</text>
+      <text x="14" y="80" fill="#38bdf8" font-size="11">• 24h Time &amp; ISO date normalization</text>
+      <text x="14" y="96" fill="#5dfeca" font-size="11">• Unique Index: { slug: 1 }</text>
+    </g>
+
+    <!-- Card 3: database/booking.model.ts -->
+    <g transform="translate(20, 180)">
+      <rect width="265" height="110" rx="8" fill="#1a1d20" stroke="#3a3e42" stroke-width="1"/>
+      <text x="14" y="24" fill="#e2e8f0" font-size="14" font-weight="600">database/booking.model.ts</text>
+      <text x="14" y="44" fill="#94a3b8" font-size="12">Booking Schema &amp; Refs</text>
+      <text x="14" y="64" fill="#38bdf8" font-size="11">• eventId ref: 'Event'</text>
+      <text x="14" y="80" fill="#38bdf8" font-size="11">• Pre-save checks event exists</text>
+      <text x="14" y="96" fill="#fb7185" font-size="11">• Unique: { eventId: 1, email: 1 }</text>
+    </g>
+
+    <!-- Card 4: database/index.ts & lib/constants.ts -->
+    <g transform="translate(305, 180)">
+      <rect width="275" height="110" rx="8" fill="#1a1d20" stroke="#3a3e42" stroke-width="1"/>
+      <text x="14" y="24" fill="#e2e8f0" font-size="14" font-weight="600">database/index.ts &amp; lib/utils</text>
+      <text x="14" y="44" fill="#94a3b8" font-size="12">Central re-export hub</text>
+      <text x="14" y="64" fill="#94a3b8" font-size="11">• Export Event, Booking, IEvent</text>
+      <text x="14" y="80" fill="#94a3b8" font-size="11">• lib/utils.ts (cn = clsx + twMerge)</text>
+      <text x="14" y="96" fill="#94a3b8" font-size="11">• lib/posthog-server.ts client</text>
+    </g>
+  </g>
+
+  <!-- ==================== 5. EXTERNAL SERVICES & ENV LAYER ==================== -->
+  <g transform="translate(720, 600)">
+    <rect width="620" height="310" rx="14" fill="#0f172a" fill-opacity="0.8" stroke="#1e293b" stroke-width="1.5" filter="url(#cardShadow)"/>
+    <rect x="0" y="0" width="620" height="40" rx="14" fill="#1e293b" fill-opacity="0.6"/>
+    <circle cx="24" cy="20" r="6" fill="#34d399"/>
+    <text x="40" y="25" fill="#34d399" font-size="15" font-weight="700">External Services &amp; Environment Variables</text>
+
+    <!-- Env Vars Summary Table -->
+    <g transform="translate(20, 55)">
+      <rect width="580" height="140" rx="8" fill="#131e24" stroke="#224249" stroke-width="1"/>
+      <text x="14" y="24" fill="#5dfeca" font-size="13" font-weight="700">Environment Variables (.env.local)</text>
+      
+      <text x="14" y="48" fill="#e2e8f0" font-size="12" font-family="monospace">NEXT_PUBLIC_BASE_URL</text>
+      <text x="230" y="48" fill="#94a3b8" font-size="12">Used by RSC pages for internal API fetch calls</text>
+      
+      <text x="14" y="72" fill="#e2e8f0" font-size="12" font-family="monospace">MONGODB_URI</text>
+      <text x="230" y="72" fill="#94a3b8" font-size="12">Server connection string for Mongoose in lib/mongodb.ts</text>
+      
+      <text x="14" y="96" fill="#e2e8f0" font-size="12" font-family="monospace">NEXT_PUBLIC_POSTHOG_TOKEN</text>
+      <text x="230" y="96" fill="#94a3b8" font-size="12">Analytics project key (client instrumentation &amp; server)</text>
+      
+      <text x="14" y="120" fill="#e2e8f0" font-size="12" font-family="monospace">CLOUDINARY_URL / KEYS</text>
+      <text x="230" y="120" fill="#94a3b8" font-size="12">Credentials for image buffer upload in /api/events</text>
+    </g>
+
+    <!-- External Services Badges -->
+    <g transform="translate(20, 210)">
+      <!-- Mongo -->
+      <g transform="translate(0, 0)">
+        <rect width="180" height="80" rx="8" fill="#13241b" stroke="#059669" stroke-width="1"/>
+        <text x="14" y="28" fill="#34d399" font-size="14" font-weight="700">MongoDB Atlas</text>
+        <text x="14" y="48" fill="#94a3b8" font-size="11">Collections:</text>
+        <text x="14" y="66" fill="#e2e8f0" font-size="11">• events  • bookings</text>
+      </g>
+      <!-- Cloudinary -->
+      <g transform="translate(200, 0)">
+        <rect width="180" height="80" rx="8" fill="#241a13" stroke="#d97706" stroke-width="1"/>
+        <text x="14" y="28" fill="#fcd34d" font-size="14" font-weight="700">Cloudinary CDN</text>
+        <text x="14" y="48" fill="#94a3b8" font-size="11">Folder: "DevEvent"</text>
+        <text x="14" y="66" fill="#e2e8f0" font-size="11">next.config remotePattern</text>
+      </g>
+      <!-- PostHog -->
+      <g transform="translate(400, 0)">
+        <rect width="180" height="80" rx="8" fill="#24141e" stroke="#db2777" stroke-width="1"/>
+        <text x="14" y="28" fill="#f472b6" font-size="14" font-weight="700">PostHog Analytics</text>
+        <text x="14" y="48" fill="#94a3b8" font-size="11">Proxy rewrite /ingest</text>
+        <text x="14" y="66" fill="#e2e8f0" font-size="11">Event capturing</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Connectors -->
+  <!-- RSC to API -->
+  <path d="M 850 210 L 960 210" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrowBlue)"/>
+  <path d="M 850 320 L 960 200" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrowBlue)"/>
+  
+  <!-- BookEvent to Server Action -->
+  <path d="M 380 490 C 450 520, 900 520, 960 400" stroke="#c084fc" stroke-width="2" fill="none" marker-end="url(#arrowPurple)"/>
+  <text x="640" y="510" fill="#c084fc" font-size="12" font-weight="600" text-anchor="middle">Server Action RPC (createBooking)</text>
+
+</svg>

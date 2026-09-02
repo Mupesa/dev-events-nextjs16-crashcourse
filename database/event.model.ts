@@ -1,6 +1,6 @@
 import { model, models, Schema, type Model } from "mongoose";
 
-export interface EventDocument {
+export interface IEvent {
   title: string;
   slug: string;
   description: string;
@@ -35,7 +35,7 @@ const nonEmptyStringList = {
   },
 } as const;
 
-const eventSchema = new Schema<EventDocument>(
+const eventSchema = new Schema<IEvent>(
   {
     title: requiredText,
     slug: { type: String, required: true, trim: true },
@@ -87,7 +87,7 @@ function normalizeTime(value: string): string {
   return `${hours.toString().padStart(2, "0")}:${match[2]}`;
 }
 
-eventSchema.pre("save", function () {
+eventSchema.pre("validate", function () {
   const requiredValues = [
     this.title,
     this.description,
@@ -112,10 +112,27 @@ eventSchema.pre("save", function () {
     if (!this.slug) throw new Error("Event title must produce a valid slug.");
   }
 
-  // Normalize valid dates to an unambiguous ISO-8601 representation.
-  const parsedDate = new Date(this.date);
-  if (Number.isNaN(parsedDate.getTime())) {
-    throw new Error("Event date must be a valid date.");
+  // Reject calendar overflows before storing an unambiguous UTC date.
+  const dateMatch = this.date
+    .trim()
+    .match(/^(\d{4})-(\d{2})-(\d{2})(?:T00:00:00\.000Z)?$/);
+
+  if (!dateMatch) {
+    throw new Error("Event date must use YYYY-MM-DD format.");
+  }
+
+  const year = Number(dateMatch[1]);
+  const month = Number(dateMatch[2]);
+  const day = Number(dateMatch[3]);
+  const parsedDate = new Date(Date.UTC(year, month - 1, day));
+
+  if (
+    year < 1000 ||
+    parsedDate.getUTCFullYear() !== year ||
+    parsedDate.getUTCMonth() !== month - 1 ||
+    parsedDate.getUTCDate() !== day
+  ) {
+    throw new Error("Event date must be a valid calendar date.");
   }
 
   this.date = parsedDate.toISOString();
@@ -125,5 +142,5 @@ eventSchema.pre("save", function () {
 eventSchema.index({ slug: 1 }, { unique: true });
 
 export const Event =
-  (models.Event as Model<EventDocument> | undefined) ??
-  model<EventDocument>("Event", eventSchema);
+  (models.Event as Model<IEvent> | undefined) ??
+  model<IEvent>("Event", eventSchema);

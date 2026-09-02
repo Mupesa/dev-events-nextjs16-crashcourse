@@ -1,8 +1,17 @@
 import ExploreBtn from "@/components/ExploreBtn";
 import EventCard from "@/components/EventCard";
-import { events } from "@/lib/constants";
+import type { IEvent } from "@/database";
+import {cacheLife} from "next/cache";
+/*import { events } from "@/lib/constants";*/ //No need for this, the baseurl now gets this import for us
 
-const Page= () => {
+const BASE_URL= process.env.NEXT_PUBLIC_BASE_URL;
+const Page= async() => {
+    'use cache';
+    cacheLife('hours')
+
+    const response= await fetch(`${BASE_URL}/api/events`);
+    const {events} = await response.json();
+
   return (
       <section>
         <h1 className="text-center">The hub for every Dev <br/>event you cannot miss</h1>
@@ -13,7 +22,7 @@ const Page= () => {
               <h3>Featured Events</h3>
 
               <ul className="events">
-                  {events.map((event) => (
+                  {events && events.length>0 && events.map((event:IEvent) => (
                       <li key={event.slug}>
                           <EventCard {...event} />
                       </li>

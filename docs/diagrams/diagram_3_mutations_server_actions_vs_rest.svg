@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 920" width="100%" height="100%" style="background:#090d12; font-family:'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1118"/>
+      <stop offset="100%" stop-color="#05080c"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5dfeca"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+    <filter id="shadow3" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+    <marker id="arrCyan3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 Z" fill="#5dfeca"/>
+    </marker>
+    <marker id="arrPurple3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 Z" fill="#c084fc"/>
+    </marker>
+    <marker id="arrRed3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 Z" fill="#fb7185"/>
+    </marker>
+    <marker id="arrGreen3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <rect width="1400" height="920" fill="url(#bgGrad3)" rx="16"/>
+
+  <!-- Title Header -->
+  <g transform="translate(60, 45)">
+    <rect x="0" y="0" width="8" height="42" rx="4" fill="url(#cyanGrad3)"/>
+    <text x="24" y="28" fill="#ffffff" font-size="26" font-weight="700">Mutation Architecture: Server Action vs. REST Route Handler</text>
+    <text x="24" y="48" fill="#94a3b8" font-size="14">Comparing createBooking RPC Mutation with Transactional Cloudinary Event Creation</text>
+  </g>
+
+  <!-- ==================== LEFT COLUMN: SERVER ACTION FLOW ==================== -->
+  <g transform="translate(60, 120)">
+    <rect width="610" height="740" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" filter="url(#shadow3)"/>
+    
+    <!-- Header -->
+    <rect x="0" y="0" width="610" height="45" rx="14" fill="#1e293b" fill-opacity="0.8"/>
+    <circle cx="25" cy="22" r="7" fill="#c084fc"/>
+    <text x="45" y="27" fill="#c084fc" font-size="16" font-weight="700">A. Booking Spot Mutation (Server Action RPC)</text>
+
+    <!-- Step 1 -->
+    <g transform="translate(25, 65)">
+      <rect width="560" height="65" rx="8" fill="#171926" stroke="#2e2b45" stroke-width="1"/>
+      <text x="15" y="24" fill="#c084fc" font-size="13" font-weight="700">1. User Submits Email in BookEvent.tsx</text>
+      <text x="15" y="46" fill="#94a3b8" font-size="12">Direct call: <tspan fill="#e2e8f0" font-family="monospace">createBooking({ eventId, email })</tspan></text>
+    </g>
+
+    <!-- Arrow down -->
+    <line x1="305" y1="130" x2="305" y2="155" stroke="#c084fc" stroke-width="2" marker-end="url(#arrPurple3)"/>
+
+    <!-- Step 2 -->
+    <g transform="translate(25, 155)">
+      <rect width="560" height="95" rx="8" fill="#171926" stroke="#2e2b45" stroke-width="1"/>
+      <text x="15" y="24" fill="#5dfeca" font-size="13" font-weight="700">2. lib/actions/booking.action.ts ('use server')</text>
+      <text x="15" y="46" fill="#94a3b8" font-size="12">• Validate <tspan fill="#e2e8f0">isValidObjectId(eventId)</tspan> &amp; email pattern/length</text>
+      <text x="15" y="66" fill="#94a3b8" font-size="12">• <tspan fill="#e2e8f0">connectDB()</tspan> ensures active Mongoose connection</text>
+      <text x="15" y="86" fill="#94a3b8" font-size="12">• Verifies <tspan fill="#e2e8f0">Event.exists({ _id: eventId })</tspan></text>
+    </g>
+
+    <!-- Arrow down -->
+    <line x1="305" y1="250" x2="305" y2="275" stroke="#c084fc" stroke-width="2" marker-end="url(#arrPurple3)"/>
+
+    <!-- Step 3 -->
+    <g transform="translate(25, 275)">
+      <rect width="560" height="75" rx="8" fill="#171926" stroke="#2e2b45" stroke-width="1"/>
+      <text x="15" y="24" fill="#38bdf8" font-size="13" font-weight="700">3. Booking.create({ eventId, email: normalizedEmail })</text>
+      <text x="15" y="46" fill="#94a3b8" font-size="12">• MongoDB validates schema &amp; pre("save") hook</text>
+      <text x="15" y="64" fill="#94a3b8" font-size="12">• Unique compound index evaluated: <tspan fill="#e2e8f0">{ eventId: 1, email: 1 }</tspan></text>
+    </g>
+
+    <!-- Branching Error / Success -->
+    <!-- Error Path -->
+    <g transform="translate(25, 380)">
+      <rect width="265" height="120" rx="8" fill="#26151b" stroke="#fb7185" stroke-width="1"/>
+      <text x="12" y="24" fill="#fb7185" font-size="13" font-weight="700">Duplicate Key (Code 11000)</text>
+      <text x="12" y="46" fill="#fca5a5" font-size="11">isDuplicateKeyError(error) === true</text>
+      <text x="12" y="68" fill="#94a3b8" font-size="11">Returns: <tspan fill="#ffffff">{ success: false,</tspan></text>
+      <text x="12" y="86" fill="#ffffff" font-size="11">message: "Already booked" }</text>
+      <text x="12" y="104" fill="#94a3b8" font-size="10">Form displays error in red</text>
+    </g>
+
+    <!-- Success Path -->
+    <g transform="translate(320, 380)">
+      <rect width="265" height="120" rx="8" fill="#14261c" stroke="#34d399" stroke-width="1"/>
+      <text x="12" y="24" fill="#34d399" font-size="13" font-weight="700">Success Pipeline</text>
+      <text x="12" y="46" fill="#94a3b8" font-size="11">1. Returns: <tspan fill="#ffffff">{ success: true }</tspan></text>
+      <text x="12" y="66" fill="#5dfeca" font-size="11">2. posthog.capture('event_booked')</text>
+      <text x="12" y="86" fill="#38bdf8" font-size="11">3. router.refresh() triggers RSC</text>
+      <text x="12" y="104" fill="#94a3b8" font-size="10">Updates live booking count</text>
+    </g>
+
+    <!-- Summary Box -->
+    <g transform="translate(25, 530)">
+      <rect width="560" height="175" rx="8" fill="#111827" stroke="#1f2937" stroke-width="1"/>
+      <text x="15" y="24" fill="#c084fc" font-size="13" font-weight="700">Why Server Actions here?</text>
+      <text x="15" y="48" fill="#94a3b8" font-size="12">1. <tspan fill="#e2e8f0" font-weight="600">Zero API boilerplate</tspan>: Types are end-to-end type safe without manual HTTP serializers.</text>
+      <text x="15" y="72" fill="#94a3b8" font-size="12">2. <tspan fill="#e2e8f0" font-weight="600">Atomic validation</tspan>: Email normalization &amp; duplicate checks happen close to the DB.</text>
+      <text x="15" y="96" fill="#94a3b8" font-size="12">3. <tspan fill="#e2e8f0" font-weight="600">Fast UI feedback</tspan>: Form state immediately updates and triggers selective server refresh.</text>
+    </g>
+  </g>
+
+  <!-- ==================== RIGHT COLUMN: REST API + CLOUDINARY FLOW ==================== -->
+  <g transform="translate(730, 120)">
+    <rect width="610" height="740" rx="14" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" filter="url(#shadow3)"/>
+    
+    <!-- Header -->
+    <rect x="0" y="0" width="610" height="45" rx="14" fill="#1e293b" fill-opacity="0.8"/>
+    <circle cx="25" cy="22" r="7" fill="#5dfeca"/>
+    <text x="45" y="27" fill="#5dfeca" font-size="16" font-weight="700">B. Event Creation Flow (REST API POST + Cloudinary)</text>
+
+    <!-- Step 1 -->
+    <g transform="translate(25, 65)">
+      <rect width="560" height="65" rx="8" fill="#172224" stroke="#223b3f" stroke-width="1"/>
+      <text x="15" y="24" fill="#5dfeca" font-size="13" font-weight="700">1. Client sends POST to /api/events</text>
+      <text x="15" y="46" fill="#94a3b8" font-size="12">Payload: <tspan fill="#e2e8f0" font-family="monospace">multipart/form-data</tspan> (Image file, strings, JSON array strings)</text>
+    </g>
+
+    <!-- Arrow down -->
+    <line x1="305" y1="130" x2="305" y2="155" stroke="#5dfeca" stroke-width="2" marker-end="url(#arrCyan3)"/>
+
+    <!-- Step 2 -->
+    <g transform="translate(25, 155)">
+      <rect width="560" height="95" rx="8" fill="#172224" stroke="#223b3f" stroke-width="1"/>
+      <text x="15" y="24" fill="#38bdf8" font-size="13" font-weight="700">2. Request Validation &amp; Model Dry-Run</text>
+      <text x="15" y="46" fill="#94a3b8" font-size="12">• Validate image MIME-type &amp; size (&lt; 10MB)</text>
+      <text x="15" y="66" fill="#94a3b8" font-size="12">• Parse JSON arrays for <tspan fill="#e2e8f0">tags</tspan> &amp; <tspan fill="#e2e8f0">agenda</tspan></text>
+      <text x="15" y="86" fill="#5dfeca" font-size="12">• Runs <tspan fill="#ffffff">new Event().validate()</tspan> BEFORE initiating Cloudinary upload!</text>
+    </g>
+
+    <!-- Arrow down -->
+    <line x1="305" y1="250" x2="305" y2="275" stroke="#5dfeca" stroke-width="2" marker-end="url(#arrCyan3)"/>
+
+    <!-- Step 3 -->
+    <g transform="translate(25, 275)">
+      <rect width="560" height="75" rx="8" fill="#172224" stroke="#223b3f" stroke-width="1"/>
+      <text x="15" y="24" fill="#fcd34d" font-size="13" font-weight="700">3. Cloudinary Upload Stream</text>
+      <text x="15" y="46" fill="#94a3b8" font-size="12">• Streams image buffer to folder: <tspan fill="#e2e8f0">"DevEvent"</tspan></text>
+      <text x="15" y="64" fill="#94a3b8" font-size="12">• Receives <tspan fill="#ffffff">secure_url</tspan> and <tspan fill="#ffffff">public_id</tspan></text>
+    </g>
+
+    <!-- Branching Error / Success -->
+    <!-- Error Path (Orphan Cleanup) -->
+    <g transform="translate(25, 380)">
+      <rect width="265" height="120" rx="8" fill="#26151b" stroke="#fb7185" stroke-width="1"/>
+      <text x="12" y="24" fill="#fb7185" font-size="13" font-weight="700">Rollback / Cleanup</text>
+      <text x="12" y="46" fill="#fca5a5" font-size="11">If event.save() fails in MongoDB:</text>
+      <text x="12" y="68" fill="#ffffff" font-size="11">cloudinary.uploader.destroy(public_id)</text>
+      <text x="12" y="88" fill="#94a3b8" font-size="11">Prevents orphaned image assets</text>
+      <text x="12" y="104" fill="#fb7185" font-size="10">Returns 409 Conflict or 500 Error</text>
+    </g>
+
+    <!-- Success Path -->
+    <g transform="translate(320, 380)">
+      <rect width="265" height="120" rx="8" fill="#14261c" stroke="#34d399" stroke-width="1"/>
+      <text x="12" y="24" fill="#34d399" font-size="13" font-weight="700">201 Created</text>
+      <text x="12" y="46" fill="#94a3b8" font-size="11">1. event.image = upload.secure_url</text>
+      <text x="12" y="66" fill="#94a3b8" font-size="11">2. event.save() persisted in Mongo</text>
+      <text x="12" y="86" fill="#34d399" font-size="11">3. Returns 201 JSON { message, event }</text>
+      <text x="12" y="104" fill="#94a3b8" font-size="10">Slug auto-indexed for instant lookup</text>
+    </g>
+
+    <!-- Summary Box -->
+    <g transform="translate(25, 530)">
+      <rect width="560" height="175" rx="8" fill="#111827" stroke="#1f2937" stroke-width="1"/>
+      <text x="15" y="24" fill="#5dfeca" font-size="13" font-weight="700">Why REST Route Handler here?</text>
+      <text x="15" y="48" fill="#94a3b8" font-size="12">1. <tspan fill="#e2e8f0" font-weight="600">Standard Multipart Parsing</tspan>: NextRequest supports native binary streaming for file uploads.</text>
+      <text x="15" y="72" fill="#94a3b8" font-size="12">2. <tspan fill="#e2e8f0" font-weight="600">External Webhook / Client Agnostic</tspan>: Other services or admin scripts can POST directly.</text>
+      <text x="15" y="96" fill="#94a3b8" font-size="12">3. <tspan fill="#e2e8f0" font-weight="600">Resilient Cleanup</tspan>: Explicit try/catch handles third-party Cloudinary teardown on error.</text>
+    </g>
+  </g>
+</svg>
