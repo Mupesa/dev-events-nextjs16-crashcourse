@@ -1,7 +1,7 @@
 import React from 'react';
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { getSimilarEventsBySlug } from "@/lib/actions/event.actions";
+import { getEventBySlug, getSimilarEventsBySlug } from "@/lib/actions/event.actions";
 import { getBookingCount } from "@/lib/actions/booking.action";
 import BookEvent from "@/components/BookEvent";
 import EventCard from "@/components/EventCard";
@@ -9,8 +9,6 @@ import { formatEventDate } from "@/lib/utils";
 
 // Event detail pages depend on the request-time slug and database-backed data.
 export const instant = false;
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 // Sub-component: Detail List Item with icon
 const EventDetailItem = ({ icon, alt, label }: { icon: string; alt: string; label: string; }) => (
@@ -46,27 +44,9 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
     // In Next.js 15/16, params is a Promise that must be awaited
     const { slug } = await params;
 
-    let event;
-    try {
-        const request = await fetch(`${BASE_URL}/api/events/${slug}`, {
-            next: { revalidate: 60 }
-        });
+    const event = await getEventBySlug(slug);
 
-        if (!request.ok) {
-            if (request.status === 404) {
-                return notFound();
-            }
-            throw new Error(`Failed to fetch event: ${request.statusText}`);
-        }
-
-        const response = await request.json();
-        event = response.event;
-
-        if (!event) {
-            return notFound();
-        }
-    } catch (error) {
-        console.error('Error fetching event:', error);
+    if (!event) {
         return notFound();
     }
 
@@ -83,8 +63,6 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
         tags,
         organizer
     } = event;
-
-    if (!description) return notFound();
 
     const [bookings, similarEvents] = await Promise.all([
         getBookingCount(event._id),
