@@ -6,6 +6,7 @@ import { getBookingCount } from "@/lib/actions/booking.action";
 import BookEvent from "@/components/BookEvent";
 import EventCard from "@/components/EventCard";
 import { formatEventDate } from "@/lib/utils";
+import { resolveEventImage } from "@/lib/images";
 
 // Event detail pages depend on the request-time slug and database-backed data.
 export const instant = false;
@@ -102,7 +103,7 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
                 {/* Left Side: Event Content */}
                 <div className="content">
                     <Image
-                        src={image}
+                        src={resolveEventImage(image)}
                         alt="Event Banner"
                         width={800}
                         height={800}
