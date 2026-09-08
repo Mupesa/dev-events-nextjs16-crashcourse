@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { ALLOWED_IMAGE_HOSTS } from "./lib/images";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -8,12 +9,12 @@ const nextConfig: NextConfig = {
   cacheComponents:true,
 
   images:{
-    remotePatterns:[
-      {
-        protocol:'https',
-        hostname:'res.cloudinary.com',
-      }
-    ]
+    // Derived from the shared allow list so config, write-time validation, and
+    // the render fallback cannot drift apart.
+    remotePatterns: ALLOWED_IMAGE_HOSTS.map((hostname) => ({
+      protocol: "https" as const,
+      hostname,
+    })),
   },
   async rewrites() {
     return [

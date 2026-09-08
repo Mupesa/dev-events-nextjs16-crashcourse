@@ -1,4 +1,5 @@
 import { model, models, Schema, type Model } from "mongoose";
+import { isRenderableImageSrc } from "@/lib/images";
 
 export interface IEvent {
   title: string;
@@ -41,7 +42,14 @@ const eventSchema = new Schema<IEvent>(
     slug: { type: String, required: true, trim: true },
     description: requiredText,
     overview: requiredText,
-    image: requiredText,
+    image: {
+      ...requiredText,
+      // Reject hosts next/image cannot serve so a bad row never reaches render.
+      validate: {
+        validator: isRenderableImageSrc,
+        message: "Event image must be a local path or an allowed image host.",
+      },
+    },
     venue: requiredText,
     location: requiredText,
     date: requiredText,
